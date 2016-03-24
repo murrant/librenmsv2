@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - librenms@192.168.1.217" uuid="f4411161-3e09-445f-bd67-87b9380b82d2">
+      <secret-storage>master_key</secret-storage>
+      <user-name>librenms</user-name>
+      <schema-pattern>librenms.*</schema-pattern>
+      <default-schemas>librenms.*</default-schemas>
+    </data-source>
+    <data-source name="Sqlite (Xerial) - database.sqlite" uuid="c2f1fce2-0da1-4b40-96a6-f55ea032d036">
+      <secret-storage>master_key</secret-storage>
+      <auth-required>false</auth-required>
+    </data-source>
+  </component>
+</project>
