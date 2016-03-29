@@ -11,6 +11,7 @@
 |
 */
 
+use App\Models\DbConfig;
 use App\Models\Device;
 use App\Models\User;
 
@@ -26,7 +27,14 @@ $factory->define(User::class, function (Faker\Generator $faker) {
 
 $factory->define(Device::class, function (Faker\Generator $faker) {
     return [
-        'hostname' => $faker->domainWord.'.'.$faker->domainName,
+        'hostname' => $faker->domainWord . '.' . $faker->domainName,
         'ip'       => $faker->localIpv4,
+    ];
+});
+
+$factory->define(DbConfig::class, function (Faker\Generator $faker) {
+    return [
+        'config_name'  => $faker->regexify('\w+(\.\w+)*'),
+        'config_value' => str_random(random_int(0,512)),
     ];
 });

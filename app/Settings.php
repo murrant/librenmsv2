@@ -57,9 +57,10 @@ class Settings implements ConfigContract
 
     /**
      * Set a key value pair into the Settings store.
-     * 
+     *
      * @param string $key A . separated path to this setting
      * @param array|null $value A value or an array. If value is an array it will be converted to a . separate path(s) concatinated onto the given key
+     * @throws \Exception
      */
     public function set($key, $value = null)
     {
