@@ -31,7 +31,7 @@ class User extends Authenticatable
     /**
      * Test if the User is an admin or demo.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return boolean
      */
     public function isAdmin()
     {
@@ -42,7 +42,7 @@ class User extends Authenticatable
      * Test if this user has global read access
      * these users have a level of 5, 10 or 11 (demo).
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return boolean
      */
     public function hasGlobalRead()
     {
