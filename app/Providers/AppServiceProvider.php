@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+//app('Dingo\Api\Auth\Auth')->extend('basic', function ($app) {
+//   return new Dingo\Api\Auth\Provider\Basic($app['auth'], 'username');
+//});
     }
 
     /**
@@ -23,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment('development')) {
+        if ($this->app->environment() == 'development') {
             $this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
         }
     }

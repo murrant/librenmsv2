@@ -25,6 +25,8 @@
         <!-- AdminLTE Skins. Choose a skin from the css/skins
            folder instead of downloading all of them to reduce the load. -->
         <link rel="stylesheet" href="{{ url('css/skins/_all-skins.min.css') }}">
+        <!-- Gridstack style -->
+        <link href="{{ url('css/gridstack.min.css') }}" rel="stylesheet"/>
           <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
           <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
           <!--[if lt IE 9]>
@@ -54,12 +56,30 @@
                         </a>
                         <div class="navbar-custom-menu">
                             <ul class="nav navbar-nav">
-                                <!-- Notifications: style can be found in dropdown.less -->
+                                <!-- Notifications Menu -->
                                 <li class="dropdown notifications-menu">
-                                    <a href="{{ url('/notifications') }}">
-                                        <i class="fa fa-user fa-lg"></i>
-                                        <span class="label label-warning" id="notification-count"><span>{{ count($notifications_count) }}</span></span>
+                                    <!-- Menu toggle button -->
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-bell-o"></i>
+                                        <span class="label label-warning">{{ count($notifications) }}</span>
                                     </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="header">You have {{ count($notifications) }} unread notifications</li>
+                                        @foreach($notifications->take(5) as $notification)
+                                        <li>
+                                            <!-- Inner Menu: contains the notifications -->
+                                            <ul class="menu">
+                                                <li><!-- start notification -->
+                                                    <a href="{{ url('/notifications/'.$notification->notifications_id) }}" title="{{ $notification->body }}">
+                                                        <i class="fa fa-bell text-aqua"></i> {{ $notification->title }}
+                                                    </a>
+                                                </li>
+                                                <!-- end notification -->
+                                            </ul>
+                                        </li>
+                                        @endforeach
+                                        <li class="footer"><a href="{{ url('/notifications') }}">View all</a></li>
+                                    </ul>
                                 </li>
                                 <!-- User Account: style can be found in dropdown.less -->
                                 <li class="dropdown user user-menu">
@@ -106,7 +126,7 @@
                                 </a>
                                 <ul class="treeview-menu">
                                     <li>
-                                        <a href="{{ url('/') }}"><i class="icon fa fa-lightbulb-o"></i> Overview</a>
+                                        <a href="{{ url('/') }}"><i class="icon fa fa-lightbulb-o"></i> Dashboard</a>
                                     </li>
                                     <li>
                                         <a href="#"><i class="icon fa fa-exclamation-circle"></i> Alerts
@@ -382,6 +402,7 @@
                 <footer class="main-footer">
                     <strong>Copyright &copy; {{ date("Y") }} <a href="http://www.librenms.org">LibreNMS</a>.</strong> All rights reserved.
                 </footer>
+                @yield('settings-menu')
             <div>
         @endif
 
@@ -392,6 +413,7 @@
         <!-- Javascript Libs -->
         <!-- jQuery 2.1.4 -->
         <script src="{{ url('js/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+        <script src="{{ url('js/plugins/jQueryUI/jquery-ui.min.js') }}"></script>
         <!-- Bootstrap 3.3.5 -->
         <script src="{{ url('js/bootstrap.min.js') }}"></script>
         @yield('datatablesjs')
@@ -399,6 +421,10 @@
         <script src="{{ url('js/plugins/fastclick/fastclick.js') }}"></script>
         <!-- Toastr -->
         <script src="{{ url('js/plugins/toastr/toastr.min.js') }}"></script>
+        <!-- Lodash -->
+        <script src="{{ url('js/lodash.min.js') }}"></script>
+        <!-- Gridstack -->
+        <script src="{{ url('js/gridstack.min.js') }}"></script>
         <!-- AdminLTE Options and App -->
         <script>
             var AdminLTEOptions = {
