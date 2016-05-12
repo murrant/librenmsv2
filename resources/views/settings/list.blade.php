@@ -43,10 +43,15 @@
                 </div>
             </div>
         </div>
-</div>
+
+<section class="col-lg-6"><pre>
+{{ print_r(Settings::all(), 1) }}
+</pre></section>
+
+
     @endif
 
-
+</div>
 @endsection
 
 @section('js_before_bootstrap')
@@ -122,8 +127,11 @@
             if(data == original) return;
 
             var key = $this.attr('id');
+            console.log($this.parent().html());
 
+            $this.next('i').remove();
             $this.after('<i class="fa fa-spin fa-spinner fa-lg"></i>');
+            console.log($this.parent().html());
 
             $.ajax({
                 type: 'POST',
@@ -138,7 +146,7 @@
                     $this.data('original-value', data);
                     $this.closest('.form-group').addClass('has-success');
                     $this.next('i').remove();
-                    $this.after('<i class="fa fa-check fa-lg"></i>');
+                    $this.after('<i class="fa fa-check fa-lg text-success"></i>');
                     setTimeout(function () {
                         $this.closest('.form-group').removeClass('has-success');
                         $this.next('i').remove();
@@ -148,7 +156,7 @@
                     $this.val(original);
                     $this.closest('.form-group').addClass('has-error');
                     $this.next('i').remove();
-                    $this.after('<i class="fa fa-close fa-lg"></i>');
+                    $this.after('<i class="fa fa-close fa-lg text-danger"></i>');
                     setTimeout(function () {
                         $this.closest('.form-group').removeClass('has-error');
                         $this.next('i').remove();
@@ -159,7 +167,7 @@
 
         $('.ajax-form-radio').change(function() {
             var $this = $(this);
-            var key = $this.attr('name');
+            var key = $this.attr('id');
             var data = $this.data('value');
 
             $this.closest('label').after('<i class="fa fa-spin fa-spinner fa-lg"></i>');
@@ -196,6 +204,68 @@
             });
         });
 
+
+        $('.ajax-form-dynamic-single').each(function(index, element) {
+            var $container = $(element);
+            var $inputButtons = $container.find('.input-group-btn');
+//            console.log($inputs.attr('id'));
+//            var $formgroup = $container.children('.form-group:first');
+//            var inputField = $formgroup.children(':nth-child(2)');
+//            var $addButton = $('<div class="form-group row"><div class="col-sm-11"><button class="btn btn-default pull-right"><i class="fa fa-lg fa-plus-circle"></i> Add </button></div></div>');
+//            $container.append($addButton);
+
+//            var $removeButton = $('<span class="input-group-btn"><button class="btn btn-default"><i class="fa fa-lg fa-times-circle text-danger"></i></button></span>');
+            $inputButtons.click(function() {
+               $(this).closest('.form-group').remove();
+                updateIds($container);
+            });
+//            $inputs.parent().removeClass('col-sm-9').addClass('col-sm-8');
+//            $inputs.closest('.form-group').append($removeButton);
+            $inputButtons.removeClass('hide');
+
+        });
+
+        $('.ajax-form-dynamic-add-btn').click(function() {
+            var $container = $(this).closest('.ajax-form-dynamic-single');
+            var $inputs = $container.find('input');
+            var $newform = $container.find('.form-group:nth-last-child(2)').clone();
+//            console.log('html: ' + $formGroups.last().html());
+//            var $newform = $formGroups.last().clone(true);
+//            $newform.children('.control-label:first').empty();
+                $newform.children('label').remove();
+            $newform.children('.col-sm-9').addClass('col-sm-offset-3');
+            console.log($newform.html());
+//                        .replaceWith('<div class="col-sm-3"></div>');
+//                var $removeButton = $newform.find('.btn > i').removeClass('fa-plus-circle').addClass('fa-times-circle');
+//            console.log($newform);
+
+            // fixup the input field
+            var $newInput = $newform.find('input');
+
+            $newInput.val('');
+            var oldid = $newInput.attr('id');
+            console.log('oldid: ' + oldid);
+            var i = oldid.split('.').pop();
+            var cut = -i.length;
+            i = parseInt(i) + 1;
+
+            var id = oldid.slice(0,cut) + i;
+            console.log('newid: ' + id);
+            $newInput.attr('id', id);
+
+//                $removeButton.click(function() {
+//                   $(this).closest('.form-group').remove();
+//                });
+            $newform.insertBefore($(this).closest('.form-group'));
+        });
+
+        function updateIds(elem) {
+            var inputs = $(elem).find('input');
+            var id = inputs.attr('id');
+            var key = id.slice(0, id.lastIndexOf('.'));
+            var i = 0;
+            console.log(key);
+        }
 
     </script>
 @endsection

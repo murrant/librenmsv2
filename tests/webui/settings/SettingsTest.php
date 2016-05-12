@@ -298,6 +298,15 @@ class SettingsTest extends TestCase
         $this->assertEquals('value', $result2);
     }
 
+    public function testArrayReplace() {
+        $data = ['1one', '1two'];
+        Settings::set('test.arrreplace', ['one', 'two', 'three']);
+        Settings::set('test.arrreplace', $data);
+        $result = Settings::get('test.arrreplace');
+
+        $this->assertEquals($data, $result);
+    }
+
     public function testSubpathValue() {
         Settings::set('test.subpath', 'value');
 
