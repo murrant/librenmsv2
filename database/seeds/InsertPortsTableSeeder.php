@@ -15,7 +15,7 @@ class InsertPortsTableSeeder extends Seeder
     {
         $devices = Device::all();
         foreach ($devices as $device) {
-            $data  = ['ifIndex' => 1, 'ifDescr' => 'eth0', 'ifName' => 'eth0', 'ifSpeed' => 1000000, 'ifOperStatus' => 'up', 'ifAdminStatus' => 'up', 'ifType' => 'ethernetCsmacd', 'ifAlias' => 'eth0'];
+            $data  = ['ifIndex' => 1, 'ifDescr' => 'eth0', 'ifName' => 'eth0', 'ifSpeed' => 1000000, 'ifOperStatus' => 'up', 'ifAdminStatus' => 'up', 'ifType' => 'ethernetCsmacd', 'ifAlias' => 'eth0', 'ifLastModified' => date('Y-m-d H:i:s')];
             $device->ports()->create($data);
         }
     }
