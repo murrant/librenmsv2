@@ -48,17 +48,28 @@ class Dashboard extends Model
      */
     protected $fillable = ['user_id', 'dashboard_name', 'access'];
 
+    /**
+     * Initialize this class
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (Dashboard $dashboard) {
+            // delete related data
+            $dashboard->widgets()->delete();
+        });
+    }
+
     // ---- Query scopes ----
 
     /**
      * @param Builder $query
-     * @param $user
-     * @return Builder|static
+     * @return Builder
      */
-    public function scopeAllAvailable(Builder $query, $user)
+    public function scopeWithGlobal(Builder $query)
     {
-        return $query->where('user_id', $user->user_id)
-            ->orWhere('access', '>', 0);
+        return $query->orWhere('access', '>', 0);
     }
 
     // ---- Define Reletionships ----

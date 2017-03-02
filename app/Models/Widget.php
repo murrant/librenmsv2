@@ -11,13 +11,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $widget_title
  * @property string $widget
  * @property string $base_dimensions
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Widgets whereWidgetId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Widgets whereWidgetTitle($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Widgets whereWidget($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Widgets whereBaseDimensions($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Widget whereWidgetId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Widget whereWidgetTitle($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Widget whereWidget($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Widget whereBaseDimensions($value)
  * @mixin \Eloquent
  */
-class Widgets extends Model
+class Widget extends Model
 {
     /**
      * Indicates if the model should be timestamped.

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $settings
  * @property integer $dashboard_id
  * @property-read \App\Models\User $user
- * @property-read \App\Models\Widgets $widget
+ * @property-read \App\Models\Widget $widget
  * @property-read \App\Models\Dashboard $dashboard
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UsersWidgets whereUserWidgetId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\UsersWidgets whereUserId($value)
@@ -60,7 +60,27 @@ class UsersWidgets extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'widget_id', 'col', 'row', 'size_x', 'size_y', 'title', 'refresh', 'settings', 'dashboard_id'];
+    protected $fillable = ['widget_id', 'col', 'row', 'size_x', 'size_y', 'title', 'refresh', 'settings'];
+
+    // ---- Accessors/Mutators ----
+
+    /**
+     * @param string $settings
+     * @return array
+     */
+    public function getSettingsAttribute($settings)
+    {
+        return json_decode($settings);
+    }
+
+    /**
+     * @param array $settings
+     * @return string
+     */
+    public function gstSettingsAttribute($settings)
+    {
+        return json_encode($settings);
+    }
 
     // ---- Query scopes ----
 
@@ -83,11 +103,13 @@ class UsersWidgets extends Model
     }
 
     /**
+     * Returns the base widget definition
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function widget()
     {
-        return $this->hasOne('App\Models\Widgets', 'widget_id');
+        return $this->hasOne('App\Models\Widget', 'widget_id');
     }
 
     /**

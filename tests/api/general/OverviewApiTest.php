@@ -26,7 +26,7 @@ namespace Tests\Api\General;
 
 use App\Models\User;
 use App\Models\UsersWidgets;
-use App\Models\Widgets;
+use App\Models\Widget;
 use Illuminate\Http\Response;
 use JWTAuth;
 use Tests\TestCase;
@@ -61,7 +61,7 @@ class OverviewApiTest extends TestCase
         $user = factory(User::class)->create();
         $jwt = JWTAuth::fromUser($user);
         $data = ['widget_title' => 'Test Widget', 'widget' => 'test-widget', 'base_dimensions' => '4,3'];
-        $widgets = Widgets::create($data);
+        $widgets = Widget::create($data);
 
         $headers = [
             'HTTP_ACCEPT' => 'application/vnd.' . env('API_VENDOR', '') . '.v1+json'
@@ -76,7 +76,7 @@ class OverviewApiTest extends TestCase
         $this->seed();
         $user = factory(User::class)->create();
         $jwt = JWTAuth::fromUser($user);
-        $widget_id = Widgets::first()->widget_id;
+        $widget_id = Widget::first()->widget_id;
         $data = ['user_id'      => $user->user_id,
                  'widget_id'    => $widget_id,
                  'col'          => 1,

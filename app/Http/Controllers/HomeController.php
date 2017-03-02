@@ -9,15 +9,14 @@ use JWTAuth;
 
 class HomeController extends Controller
 {
-
-
     public function redirect(Request $request)
     {
-        $dashboard = Dashboard::where('user_id', $request->user()->user_id)->first();
+        $dashboard = $request->user()->dashboards->first();
         if (empty($dashboard->dashboard_id)) {
-            $dashboard = new Dashboard();
-            $dashboard->dashboard_name = 'Default';
-            $dashboard->access         = 0;
+            $dashboard = new Dashboard([
+                'dashboard_name' => 'Default',
+                'access'         => 0,
+            ]);
             $request->user()->dashboards()->save($dashboard);
         }
         return redirect()->route('dashboard.show', ['id' => $dashboard->dashboard_id]);

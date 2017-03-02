@@ -4,7 +4,7 @@ namespace App\Api\Controllers;
 
 use App\Models\Dashboard;
 use App\Models\UsersWidgets;
-use App\Models\Widgets;
+use App\Models\Widget;
 use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
 
@@ -24,8 +24,7 @@ class WidgetController extends Controller
      */
     public function index(Request $request)
     {
-        $widget = Widgets::all();
-        return $widget;
+        return Widget::all();
     }
 
     /**
@@ -46,17 +45,14 @@ class WidgetController extends Controller
      */
     public function store(Request $request)
     {
-        $row = Dashboard::find($request->dashboard_id)->widgets()->max('row') + 1;
-        $user_widget = new UsersWidgets;
-        $user_widget->user_id = $request->user()->user_id;
-        $user_widget->widget_id = $request->widget_id;
-        $user_widget->col = $request->col;
+        $dashboard = Dashboard::find($request->dashboard_id);
+        $row = $dashboard->widgets()->max('row') + 1;
+
+        $user_widget = new UsersWidgets($request->all());
+        $user_widget->user()->associate($request->user());
         $user_widget->row = $row;
-        $user_widget->size_x = $request->size_x;
-        $user_widget->size_y = $request->size_y;
-        $user_widget->title = $request->title;
-        $user_widget->dashboard_id = $request->dashboard_id;
-        if ($user_widget->save()) {
+
+        if ($dashboard->widgets()->save($user_widget)) {
             return $this->response->array(array('statusText' => 'OK', 'user_widget_id' => $user_widget->user_widget_id));
         } else {
             return $this->response->errorInternal();
@@ -72,8 +68,7 @@ class WidgetController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $widget = Widgets::find($id);
-        return $widget;
+        return Widget::findOrFail($id);
     }
 
     /**
@@ -98,7 +93,7 @@ class WidgetController extends Controller
     {
         if ($request->input('settings')) {
             $users_widgets = UsersWidgets::find($id);
-            $users_widgets->settings = json_encode($request->input('settings'));
+            $users_widgets->settings = $request->input('settings');
         } else {
             $users_widgets = UsersWidgets::find($id);
             $users_widgets->col = $request->input('x');

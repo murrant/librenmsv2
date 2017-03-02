@@ -20,17 +20,18 @@ class DashboardController extends Controller
     /**
      * Display a listing of all authorized devices
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $dashboards = Dashboard::allAvailable($request->user())->get();
-        return $dashboards;
+        return $request->user()->dashboards()->withGlobal()->get();
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response|null
      */
     public function create(Request $request)
@@ -51,20 +52,17 @@ class DashboardController extends Controller
             'access' => 'required',
         ]);
         if ($validation->passes()) {
-            $dashboard = new Dashboard;
-            $dashboard->dashboard_name = $request->name;
-            $dashboard->access         = $request->access;
-            if ($request->user()->dashboards()->save($dashboard)) {
+            $dashboard = $request->user()->dashboards()->create([
+                'dashboard_name' => $request->name,
+                'access'         => $request->access,
+            ]);
+
+            if ($dashboard) {
                 if (is_numeric($request->copy_from)) {
-                    $duplicate_widgets = Dashboard::find($request->copy_from)->widgets()->get();
-                    foreach ($duplicate_widgets as $tmp_widget) {
-                        /** @var UsersWidgets $tmp_widget */
-                        $new_widget               = $tmp_widget->replicate();
-                        $new_widget->user_id      = $request->user()->user_id;
-                        $new_widget->dashboard_id = $dashboard->dashboard_id;
-                        unset($new_widget->user_widget_id);
-                        $new_widget->save();
-                    }
+                    Dashboard::find($request->copy_from)->widgets->each(function (UsersWidgets $widget) use ($dashboard) {
+                        $dashboard->widgets()->save($widget->replicate());
+                    });
+
                 }
                 return $this->response->array(array('statusText' => 'OK', 'dashboard_id' => $dashboard->dashboard_id));
             } else {
@@ -79,13 +77,14 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
     {
         $dashboard = Dashboard::find($id);
-        $widgets   = $dashboard->widgets()->get();
+        $widgets = $dashboard->widgets;
 
         return array('dashboard' => $dashboard, 'widgets' => $widgets);
     }
@@ -132,12 +131,13 @@ class DashboardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
-        if (Dashboard::where('user_id', $request->user()->user_id)->where('dashboard_id', $id)->delete()) {
+        if ($request->user()->dashboards()->where('dashboard_id', $id)->delete()) {
             if (UsersWidgets::where('dashboard_id', $id)->delete() >= 0) {
                 return $this->response->array(array('statusText' => 'OK'));
             } else {

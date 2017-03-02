@@ -154,4 +154,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany('App\Models\Dashboard');
     }
+
+    public function widgets()
+    {
+        return $this->hasMany('App\Models\UsersWidgets');
+    }
 }
