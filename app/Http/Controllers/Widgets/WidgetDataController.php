@@ -32,7 +32,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Device;
 use App\Models\Port;
 use App\Models\User;
-use App\Models\UsersWidgets;
+use App\Models\Widget;
 use Illuminate\Http\Request;
 use Settings;
 
@@ -110,7 +110,7 @@ class WidgetDataController extends Controller
                 $count['down']++;
             }
         }
-        $widget_settings = json_decode(UsersWidgets::getSettings($request)->value('settings'));
+        $widget_settings = json_decode(Widget::getSettings($request)->value('settings'));
         return view('widgets.availability-map', compact(['devices', 'uptime', 'count', 'action', 'widget_settings']));
     }
 
@@ -176,7 +176,7 @@ class WidgetDataController extends Controller
      */
     public function notes(Request $request, $action = null)
     {
-        $widget_settings = json_decode(UsersWidgets::getSettings($request)->value('settings'));
+        $widget_settings = json_decode(Widget::getSettings($request)->value('settings'));
         return view('widgets.notes', compact(['action', 'widget_settings']));
     }
 
@@ -191,7 +191,7 @@ class WidgetDataController extends Controller
         $div_id = mt_rand();
         $request->params = '{"content-type": "text/plain", "data-source": "rrd-csv"}';
         $params = json_decode($request->params);
-        $widget_settings = json_decode(UsersWidgets::getSettings($request)->value('settings'));
+        $widget_settings = json_decode(Widget::getSettings($request)->value('settings'));
         return view('widgets.graph', compact(['action', 'params', 'div_id']));
     }
 }

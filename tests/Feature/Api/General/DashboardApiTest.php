@@ -26,9 +26,8 @@ namespace Tests\Feature\Api\General;
 
 use App\Models\Dashboard;
 use App\Models\User;
-use App\Models\UsersWidgets;
-
 use App\Models\Widget;
+use App\Models\WidgetDefinition;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use JWTAuth;
@@ -65,8 +64,8 @@ class DashboardApiTest extends TestCase
         $user = factory(User::class)->create();
         $jwt = JWTAuth::fromUser($user);
 
-        $this->seed('WidgetSeeder');
-        $widget = Widget::first();
+        $this->seed('WidgetDefinitionSeeder');
+        $widget = WidgetDefinition::first();
 
         $headers = [
             'HTTP_ACCEPT' => 'application/vnd.' . env('API_VENDOR', '') . '.v1+json'
@@ -82,7 +81,7 @@ class DashboardApiTest extends TestCase
         $dashboard = factory(Dashboard::class)->make();
         $user->dashboards()->save($dashboard);
 
-        $widget = factory(UsersWidgets::class)->make();
+        $widget = factory(Widget::class)->make();
         $widget->user()->associate($user->user_id);
         $dashboard->widgets()->save($widget);
 

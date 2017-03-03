@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $dashboard_name
  * @property integer $access
  * @property-read \App\Models\User $user
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UsersWidgets[] $widgets
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Widget[] $widgets
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Dashboard whereDashboardId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Dashboard whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Dashboard whereDashboardName($value)
@@ -72,7 +72,7 @@ class Dashboard extends Model
         return $query->orWhere('access', '>', 0);
     }
 
-    // ---- Define Reletionships ----
+    // ---- Define Relationships ----
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -87,6 +87,6 @@ class Dashboard extends Model
      */
     public function widgets()
     {
-        return $this->hasMany('App\Models\UsersWidgets', 'dashboard_id');
+        return $this->hasMany('App\Models\Widget', 'dashboard_id');
     }
 }

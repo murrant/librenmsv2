@@ -3,8 +3,8 @@
 namespace App\Api\Controllers;
 
 use App\Models\Dashboard;
-use App\Models\UsersWidgets;
 use App\Models\Widget;
+use App\Models\WidgetDefinition;
 use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
 
@@ -24,7 +24,7 @@ class WidgetController extends Controller
      */
     public function index(Request $request)
     {
-        return Widget::all();
+        return WidgetDefinition::all();
     }
 
     /**
@@ -48,7 +48,7 @@ class WidgetController extends Controller
         $dashboard = Dashboard::find($request->dashboard_id);
         $row = $dashboard->widgets()->max('row') + 1;
 
-        $user_widget = new UsersWidgets($request->all());
+        $user_widget = new Widget($request->all());
         $user_widget->user()->associate($request->user());
         $user_widget->row = $row;
 
@@ -68,7 +68,7 @@ class WidgetController extends Controller
      */
     public function show(Request $request, $id)
     {
-        return Widget::findOrFail($id);
+        return WidgetDefinition::findOrFail($id);
     }
 
     /**
@@ -92,10 +92,10 @@ class WidgetController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->input('settings')) {
-            $users_widgets = UsersWidgets::find($id);
+            $users_widgets = Widget::find($id);
             $users_widgets->settings = $request->input('settings');
         } else {
-            $users_widgets = UsersWidgets::find($id);
+            $users_widgets = Widget::find($id);
             $users_widgets->col = $request->input('x');
             $users_widgets->row = $request->input('y');
             $users_widgets->size_x = $request->input('width');
@@ -117,7 +117,7 @@ class WidgetController extends Controller
      */
     public function destroy($id)
     {
-        if (UsersWidgets::destroy($id)) {
+        if (Widget::destroy($id)) {
             return $this->response->array(array('statusText' => 'OK'));
         } else {
             return $this->response->errorInternal();

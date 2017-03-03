@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         // allow all values to be inserted
         Model::unguard();
 
-        $this->call(WidgetSeeder::class);
+        $this->call(WidgetDefinitionSeeder::class);
         $this->call(DbSchemaTableSeeder::class);
 //        $this->call(InsertDevicesTableSeeder::class);
 //        $this->call(InsertPortsTableSeeder::class);

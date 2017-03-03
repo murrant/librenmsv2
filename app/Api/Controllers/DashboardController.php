@@ -3,7 +3,7 @@
 namespace App\Api\Controllers;
 
 use App\Models\Dashboard;
-use App\Models\UsersWidgets;
+use App\Models\Widget;
 use Dingo\Api\Routing\Helpers;
 use Illuminate\Http\Request;
 use Validator;
@@ -59,7 +59,7 @@ class DashboardController extends Controller
 
             if ($dashboard) {
                 if (is_numeric($request->copy_from)) {
-                    Dashboard::find($request->copy_from)->widgets->each(function (UsersWidgets $widget) use ($dashboard) {
+                    Dashboard::find($request->copy_from)->widgets->each(function (Widget $widget) use ($dashboard) {
                         $dashboard->widgets()->save($widget->replicate());
                     });
 
@@ -138,7 +138,7 @@ class DashboardController extends Controller
     public function destroy(Request $request, $id)
     {
         if ($request->user()->dashboards()->where('dashboard_id', $id)->delete()) {
-            if (UsersWidgets::where('dashboard_id', $id)->delete() >= 0) {
+            if (Widget::where('dashboard_id', $id)->delete() >= 0) {
                 return $this->response->array(array('statusText' => 'OK'));
             } else {
                 return $this->response->errorInternal();

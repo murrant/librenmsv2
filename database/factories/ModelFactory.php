@@ -27,8 +27,8 @@ use App\Models\General\Syslog;
 use App\Models\Notification;
 use App\Models\Port;
 use App\Models\User;
-use App\Models\UsersWidgets;
-use App\Models\Widgets;
+use App\Models\Widget;
+use App\Models\WidgetDefinition;
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
@@ -160,7 +160,7 @@ $factory->define(IPv4Mac::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(Widgets::class, function (Faker\Generator $faker) {
+$factory->define(WidgetDefinition::class, function (Faker\Generator $faker) {
     return [
         'widget_title'    => $faker->text(20),
         'widget'          => $faker->regexify('[a-z\-]{4,12}'),
@@ -168,14 +168,14 @@ $factory->define(Widgets::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(UsersWidgets::class, function (Faker\Generator $faker) use ($factory) {
+$factory->define(Widget::class, function (Faker\Generator $faker) use ($factory) {
     return [
         'col'       => 1,
         'row'       => 2,
         'size_x'    => 1,
         'size_y'    => 2,
         'title'     => $faker->text(20),
-        'widget_id' => $factory->create(Widgets::class)->widget_id,
+        'widget_id' => $factory->create(\App\Models\WidgetDefinition::class)->widget_id,
         'settings'  => '',
     ];
 });

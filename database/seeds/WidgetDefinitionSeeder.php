@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Widgets;
+use App\Models\WidgetDefinition;
 use Illuminate\Database\Seeder;
 
-class WidgetSeeder extends Seeder
+class WidgetDefinitionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -31,7 +31,7 @@ class WidgetSeeder extends Seeder
         ]);
 
         $data->each(function ($widget) {
-            Widgets::create($widget);
+            WidgetDefinition::create($widget);
         });
     }
 }
